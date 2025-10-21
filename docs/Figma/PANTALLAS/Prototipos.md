@@ -32,9 +32,9 @@ Este documento centraliza toda la información sobre los **diseños y prototipos
 ### Sistema de Diseño
 
 **Paleta de colores:**
-- **Color primario:** # - Acciones principales
-- **Color secundario:** #XXXXXX - Elementos complementarios
-- **Color de acento:** #XXXXXX - Llamadas a la acción
+- **Color primario:** #436EF0 - Acciones principales
+- **Color secundario:** #43DBF0 - Elementos complementarios
+- **Color de enlace:** #57B7EB - Llamadas a la acción
 - **Colores de estado:**
   - Éxito: #03A100
   - Error: #F5180D
