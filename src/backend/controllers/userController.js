@@ -1,4 +1,4 @@
-import  {userService} from '../services/userServices.js';
+import { userService } from '../services/userServices.js';
 
 export const userController = {
     async getUsers(req, res){
@@ -6,7 +6,7 @@ export const userController = {
             const users = await userService.getAllUsers();
             res.status(200).json({
                 succes: true,
-                data:users
+                data: users
             })
         }catch(error){
             res.status(500).json({
@@ -16,48 +16,72 @@ export const userController = {
         }
     },
 
-
     async createUser (req, res){
         try{
-            const {email, name}= req.body;
+            const {email, name} = req.body;
             //Validacion basica
             if(!email || !name){
                 return res.status(400).json({
-                    succes:false,
-                    message:'Email y nombre son obligatorios'
+                    succes: false,
+                    message: 'Email y nombre son obligatorios'
                 });
             }
             const newUser = await userService.createUser({email, name});
             res.status(201).json({
-                succes:true,
+                succes: true,
                 data: newUser,
                 message: 'Usuario creado correctamente'
             });
         }catch(error){
             res.status(500).json({
-                sucess:false,
-                message:error.message
-            })
+                sucess: false,
+                message: error.message
+            });
         }
     },
+
     async updateUser(req, res){
         try{
-            const {id} =req.params;
+            const {id} = req.params;
             const updateData = req.body;
 
-            const uopdateUser = await userService.updatetUser(id, updateData);
+            const updateUser = await userService.updateUser(id, updateData);
 
             res.status(200).json({
-                sucess:true,
-                data:updateUser,
+                sucess: true,
+                data: updateUser,
                 message: 'Usuario creado correctamente'
-            })
+            });
         }catch(error){
             res.status(500).json({
-                sucess:false,
-                message:error.message
-            })
+                sucess: false,
+                message: error.message
+            });
+        }
+    },
 
+    // 🔥 Nuevo método deleteUser agregado sin modificar el resto
+    async deleteUser(req, res){
+        try{
+            const { id } = req.params;
+            const deletedUser = await userService.deleteUser(id);
+
+            if(!deletedUser){
+                return res.status(404).json({
+                    succes: false,
+                    message: 'Usuario no encontrado'
+                });
+            }
+
+            res.status(200).json({
+                succes: true,
+                message: 'Usuario eliminado correctamente'
+            });
+        }catch(error){
+            res.status(500).json({
+                succes: false,
+                message: error.message
+            });
         }
     }
 }
