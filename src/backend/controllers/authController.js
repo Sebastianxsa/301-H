@@ -1,4 +1,5 @@
 import { authServices } from "../services/authService.js";
+import { generateToken } from "../utils/auth.js";
 
 export const authControllers = {
     //Registro
@@ -18,5 +19,17 @@ export const authControllers = {
                 message: error.message
             });
         }
+    },
+    //google callback
+    async googleCallback(){
+        try{
+            const user = req.user;
+            const token = generateToken(user.id, user.email);
+
+            res.redirect(`http://localhost:5173/`); //vista url frontend
+        }catch(error){
+            res.redirect(`http://localhost:5173/`); //vista de frontend
+        }
+        
     }
 };
