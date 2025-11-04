@@ -6,14 +6,14 @@ const prisma = new PrismaClient();
 
 passport.use(
     new GoogleStrategy({
-        clientID: process.CLIENT_ID,
-        clientSecret: process.CLIENT_SECRET,
-        callbackURL: "api/auth/google/callback",
+        clientID: process.env.CLIENT_ID,
+        clientSecret: process.env.CLIENT_SECRET,
+        callbackURL: "http://localhost:3000/api/auth/google/callback",
         },
-        async(Profiler, done) =>{
+        async(accessToken,refreshToken,Profile, done) =>{
             try{
-                const email = Profiler.emails[0].value;
-                const googleId = Profiler.id;
+                const email = Profile.emails[0].value;
+                const googleId = Profile.id;
 
                 let user = await prisma.user.findUnique({
                     where: { googleId},
@@ -26,16 +26,16 @@ passport.use(
                     user = await prisma.user.update({
                         where:{email},
                         data: {googleId: googleId, 
-                            avatar: Profiler.photo[0].value,
+                            avatar: Profile.photo[0].value,
                         }
                     });
                 }} else{
                     user = await prisma.user.create({
                         data:{
                             email: email,
-                            name: Profiler.displayName,
+                            name: Profile.displayName,
                             googleId:googleId,
-                            avatar: Profiler.photo[0].value
+                            avatar: Profile.photo[0].value
                         }
                     })
                 }
