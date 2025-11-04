@@ -1,35 +1,38 @@
+// src/controllers/authController.js
 import { authServices } from "../services/authService.js";
 import { generateToken } from "../utils/auth.js";
 
 export const authControllers = {
-    //Registro
-    async register(req, res){
-        try{
+    // Registro tradicional
+    async register(req, res) {
+        try {
             const { email, name, password } = req.body;
-            const result = await authServices.register({email, name, password});
+            const result = await authServices.register({ email, name, password });
 
             res.status(201).json({
-                succes: true,
+                success: true,
                 message: "Usuario registrado exitosamente",
                 data: result
             });
-        }catch(error){
+        } catch (error) {
             res.status(500).json({
-                succes: false,
+                success: false,
                 message: error.message
             });
         }
     },
-    //google callback
-    async googleCallback(){
-        try{
-            const user = req.user;
+
+    // Callback de Google
+    async googleCallback(req, res) {  // ✔ Recibe req y res
+        try {
+            const user = req.user;  // Passport agrega el usuario a req
             const token = generateToken(user.id, user.email);
 
-            res.redirect(`http://localhost:5173/login-sucess?token=${token}`); //vista url frontend
-        }catch(error){
-            res.redirect(`http://localhost:5173/login-error?message=?${error.message}`); //vista de frontend
+            // Redirige al frontend con token
+            res.redirect(`http://localhost:5173/login-sucess?token=${token}`);
+        } catch (error) {
+            // Redirige al frontend a la página de error
+            res.redirect(`http://localhost:5173/login-error?message=${error.message}`);
         }
-        
     }
 };
